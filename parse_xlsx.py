@@ -1,13 +1,10 @@
 import os
-
+import random
+from random import randrange
 import httplib2
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 import config
-
-
-def get_service_simple():
-    return build('sheets', 'v4', developerKey=config.test_token)
 
 
 def get_service_sacc():
@@ -24,17 +21,22 @@ def get_service_sacc():
     return build('sheets', 'v4', http=creds_service)
 
 
-# service = get_service_simple()
-service = get_service_sacc()
-sheet = service.spreadsheets()
+def get_request_to_sheet(current_month: str):
+    sheet = get_service_sacc().spreadsheets()
+    response = sheet.values().get(spreadsheetId=config.test_expenses_sheet,
+                                  range=f"{current_month}!A1:C100").execute()
+    return response
 
-# https://docs.google.com/spreadsheets/d/xxx/edit#gid=0
+
+def append_values_to_expenses(information: list):
+    sheet = get_service_sacc().spreadsheets()
+    response = sheet.values().append(spreadsheetId=config.test_expenses_sheet,
+                                     range='март!A1',
+                                     valueInputOption='RAW',
+                                     body={'values': information}
+                                     ).execute
+    print(information)
 
 
-# https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/get
-# response = sheet.values().get(spreadsheetId=config.test_sheet, range="Лист1!A1:D1").execute()
-
-# https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/batchGet
-response = sheet.values().batchGet(spreadsheetId=config.test_sheet, ranges=["Лист1"]).execute()
-
-print(response)
+#append_values_to_expenses([[random.randrange(10, 90) for i in range(3)]])
+print(get_request_to_sheet('Март'))

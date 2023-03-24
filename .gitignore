@@ -2,6 +2,7 @@
 config.py
 .idea
 venv
+test.py
 
 #secret-google-token
 colizeum-manager-62d9eeec649e.json

@@ -1,3 +1,11 @@
+# project
+config.py
+.idea
+venv
+
+#secret-google-token
+colizeum-manager-62d9eeec649e.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
